@@ -1,0 +1,434 @@
+{
+  "total": 27,
+  "passed": 19,
+  "failed": 8,
+  "skipped": 6,
+  "blocked": 0,
+  "failures": [
+    {
+      "test": "B1: Create Test Vendor",
+      "severity": "blocking",
+      "error": "Request failed with status code 500",
+      "stack": "AxiosError: Request failed with status code 500\n    at settle (/Users/mohiuddin/Documents/Side Projects/Intelligent Vendor management System/backend/node_modules/axios/dist/node/axios.cjs:2106:12)\n    at IncomingMessage.handleStreamEnd (/Users/mohiuddin/Documents/Side Projects/Intelligent Vendor management System/backend/node_modules/axios/dist/node/axios.cjs:3491:11)\n    at IncomingMessage.emit (node:events:520:35)\n    at endReadableNT (node:internal/streams/readable:1701:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)\n    at Axios.request (/Users/mohiuddin/Documents/Side Projects/Intelligent Vendor management System/backend/node_modules/axios/dist/node/axios.cjs:4731:41)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async TestRunner.apiCall (/Users/mohiuddin/Documents/Side Projects/Intelligent Vendor management System/backend/tests/full-test-campaign.js:142:26)\n    at async /Users/mohiuddin/Documents/Side Projects/Intelligent Vendor management System/backend/tests/full-test-campaign.js:311:24\n    at async TestRunner.execute (/Users/mohiuddin/Documents/Side Projects/Intelligent Vendor management System/backend/tests/full-test-campaign.js:85:7)\n    at async phaseB_SmokeTests (/Users/mohiuddin/Documents/Side Projects/Intelligent Vendor management System/backend/tests/full-test-campaign.js:295:3)\n    at async runFullTestCampaign (/Users/mohiuddin/Documents/Side Projects/Intelligent Vendor management System/backend/tests/full-test-campaign.js:899:7)",
+      "duration": 4014,
+      "logs": [
+        {
+          "timestamp": "2025-12-05T20:59:47.229Z",
+          "level": "info",
+          "message": "Starting test: B1: Create Test Vendor"
+        },
+        {
+          "timestamp": "2025-12-05T20:59:47.230Z",
+          "level": "warn",
+          "message": "API call failed (attempt 1/3): Request failed with status code 500"
+        },
+        {
+          "timestamp": "2025-12-05T20:59:49.237Z",
+          "level": "warn",
+          "message": "API call failed (attempt 2/3): Request failed with status code 500"
+        },
+        {
+          "timestamp": "2025-12-05T20:59:51.243Z",
+          "level": "warn",
+          "message": "API call failed (attempt 3/3): Request failed with status code 500"
+        },
+        {
+          "timestamp": "2025-12-05T20:59:51.244Z",
+          "level": "error",
+          "message": "❌ FAILED: Request failed with status code 500"
+        }
+      ],
+      "requests": [
+        {
+          "timestamp": "2025-12-05T20:59:47.229Z",
+          "method": "POST",
+          "endpoint": "/api/onboarding/vendor",
+          "data": {
+            "legal_name": "Test Vendor Corp",
+            "country": "US",
+            "tax_id": "12-3456789",
+            "email": "test@vendor.com",
+            "phone": "+1-555-0100",
+            "address": {
+              "street": "123 Test St",
+              "city": "New York",
+              "state": "NY",
+              "zip": "10001"
+            }
+          },
+          "headers": {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer "
+          }
+        }
+      ],
+      "responses": [],
+      "timestamp": "2025-12-05T20:59:51.243Z",
+      "reproductionSteps": "1. POST /api/onboarding/vendor with data: {\"legal_name\":\"Test Vendor Corp\",\"country\":\"US\",\"tax_id\":\"12-3456789\",\"email\":\"test@vendor.com\",\"phone\":\"+1-555-0100\",\"address\":{\"street\":\"123 Test St\",\"city\":\"New York\",\"state\":\"NY\",\"zip\":\"10001\"}}",
+      "suggestedFix": "Server error. Check backend logs for detailed error message."
+    },
+    {
+      "test": "C3.2: Sanctions Screening",
+      "severity": "blocking",
+      "error": "Request failed with status code 401",
+      "stack": "AxiosError: Request failed with status code 401\n    at settle (/Users/mohiuddin/Documents/Side Projects/Intelligent Vendor management System/backend/node_modules/axios/dist/node/axios.cjs:2106:12)\n    at IncomingMessage.handleStreamEnd (/Users/mohiuddin/Documents/Side Projects/Intelligent Vendor management System/backend/node_modules/axios/dist/node/axios.cjs:3491:11)\n    at IncomingMessage.emit (node:events:520:35)\n    at endReadableNT (node:internal/streams/readable:1701:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)\n    at Axios.request (/Users/mohiuddin/Documents/Side Projects/Intelligent Vendor management System/backend/node_modules/axios/dist/node/axios.cjs:4731:41)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async TestRunner.apiCall (/Users/mohiuddin/Documents/Side Projects/Intelligent Vendor management System/backend/tests/full-test-campaign.js:142:26)\n    at async /Users/mohiuddin/Documents/Side Projects/Intelligent Vendor management System/backend/tests/full-test-campaign.js:602:24\n    at async TestRunner.execute (/Users/mohiuddin/Documents/Side Projects/Intelligent Vendor management System/backend/tests/full-test-campaign.js:85:7)\n    at async testContinuousComplianceE2E (/Users/mohiuddin/Documents/Side Projects/Intelligent Vendor management System/backend/tests/full-test-campaign.js:592:3)\n    at async phaseC_E2EFlows (/Users/mohiuddin/Documents/Side Projects/Intelligent Vendor management System/backend/tests/full-test-campaign.js:416:3)\n    at async runFullTestCampaign (/Users/mohiuddin/Documents/Side Projects/Intelligent Vendor management System/backend/tests/full-test-campaign.js:900:7)",
+      "duration": 4012,
+      "logs": [
+        {
+          "timestamp": "2025-12-05T21:00:19.316Z",
+          "level": "info",
+          "message": "Starting test: C3.2: Sanctions Screening"
+        },
+        {
+          "timestamp": "2025-12-05T21:00:19.317Z",
+          "level": "info",
+          "message": "Testing PEP/Sanctions screening"
+        },
+        {
+          "timestamp": "2025-12-05T21:00:19.319Z",
+          "level": "warn",
+          "message": "API call failed (attempt 1/3): Request failed with status code 401"
+        },
+        {
+          "timestamp": "2025-12-05T21:00:21.323Z",
+          "level": "warn",
+          "message": "API call failed (attempt 2/3): Request failed with status code 401"
+        },
+        {
+          "timestamp": "2025-12-05T21:00:23.327Z",
+          "level": "warn",
+          "message": "API call failed (attempt 3/3): Request failed with status code 401"
+        },
+        {
+          "timestamp": "2025-12-05T21:00:23.328Z",
+          "level": "error",
+          "message": "❌ FAILED: Request failed with status code 401"
+        }
+      ],
+      "requests": [
+        {
+          "timestamp": "2025-12-05T21:00:19.317Z",
+          "method": "POST",
+          "endpoint": "/api/compliance/screen",
+          "data": {
+            "legal_name": "High Risk Entity Corp",
+            "country": "XX",
+            "screening_required": true
+          },
+          "headers": {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer "
+          }
+        }
+      ],
+      "responses": [],
+      "timestamp": "2025-12-05T21:00:23.328Z",
+      "reproductionSteps": "1. POST /api/compliance/screen with data: {\"legal_name\":\"High Risk Entity Corp\",\"country\":\"XX\",\"screening_required\":true}",
+      "suggestedFix": "Authentication failed. Ensure valid Firebase token is provided."
+    },
+    {
+      "test": "C1.1: Multi-channel Vendor Submission",
+      "severity": "critical",
+      "error": "Request failed with status code 500",
+      "stack": "AxiosError: Request failed with status code 500\n    at settle (/Users/mohiuddin/Documents/Side Projects/Intelligent Vendor management System/backend/node_modules/axios/dist/node/axios.cjs:2106:12)\n    at IncomingMessage.handleStreamEnd (/Users/mohiuddin/Documents/Side Projects/Intelligent Vendor management System/backend/node_modules/axios/dist/node/axios.cjs:3491:11)\n    at IncomingMessage.emit (node:events:520:35)\n    at endReadableNT (node:internal/streams/readable:1701:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)\n    at Axios.request (/Users/mohiuddin/Documents/Side Projects/Intelligent Vendor management System/backend/node_modules/axios/dist/node/axios.cjs:4731:41)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async TestRunner.apiCall (/Users/mohiuddin/Documents/Side Projects/Intelligent Vendor management System/backend/tests/full-test-campaign.js:142:26)\n    at async /Users/mohiuddin/Documents/Side Projects/Intelligent Vendor management System/backend/tests/full-test-campaign.js:441:25\n    at async TestRunner.execute (/Users/mohiuddin/Documents/Side Projects/Intelligent Vendor management System/backend/tests/full-test-campaign.js:85:7)\n    at async testVendorOnboardingE2E (/Users/mohiuddin/Documents/Side Projects/Intelligent Vendor management System/backend/tests/full-test-campaign.js:428:3)\n    at async phaseC_E2EFlows (/Users/mohiuddin/Documents/Side Projects/Intelligent Vendor management System/backend/tests/full-test-campaign.js:410:3)\n    at async runFullTestCampaign (/Users/mohiuddin/Documents/Side Projects/Intelligent Vendor management System/backend/tests/full-test-campaign.js:900:7)",
+      "duration": 4011,
+      "logs": [
+        {
+          "timestamp": "2025-12-05T21:00:03.281Z",
+          "level": "info",
+          "message": "Starting test: C1.1: Multi-channel Vendor Submission"
+        },
+        {
+          "timestamp": "2025-12-05T21:00:03.284Z",
+          "level": "warn",
+          "message": "API call failed (attempt 1/3): Request failed with status code 500"
+        },
+        {
+          "timestamp": "2025-12-05T21:00:05.287Z",
+          "level": "warn",
+          "message": "API call failed (attempt 2/3): Request failed with status code 500"
+        },
+        {
+          "timestamp": "2025-12-05T21:00:07.291Z",
+          "level": "warn",
+          "message": "API call failed (attempt 3/3): Request failed with status code 500"
+        },
+        {
+          "timestamp": "2025-12-05T21:00:07.292Z",
+          "level": "error",
+          "message": "❌ FAILED: Request failed with status code 500"
+        }
+      ],
+      "requests": [
+        {
+          "timestamp": "2025-12-05T21:00:03.281Z",
+          "method": "POST",
+          "endpoint": "/api/onboarding/vendor",
+          "data": {
+            "legal_name": "TechCorp Solutions Inc",
+            "country": "US",
+            "tax_id": "98-7654321",
+            "email": "contact@techcorp.com",
+            "contacts": [
+              {
+                "name": "John Doe",
+                "role": "Primary",
+                "email": "john@techcorp.com"
+              }
+            ]
+          },
+          "headers": {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer "
+          }
+        }
+      ],
+      "responses": [],
+      "timestamp": "2025-12-05T21:00:07.292Z",
+      "reproductionSteps": "1. POST /api/onboarding/vendor with data: {\"legal_name\":\"TechCorp Solutions Inc\",\"country\":\"US\",\"tax_id\":\"98-7654321\",\"email\":\"contact@techcorp.com\",\"contacts\":[{\"name\":\"John Doe\",\"role\":\"Primary\",\"email\":\"john@techcorp.com\"}]}",
+      "suggestedFix": "Server error. Check backend logs for detailed error message."
+    },
+    {
+      "test": "C2.3: Duplicate Detection",
+      "severity": "major",
+      "error": "Request failed with status code 401",
+      "stack": "AxiosError: Request failed with status code 401\n    at settle (/Users/mohiuddin/Documents/Side Projects/Intelligent Vendor management System/backend/node_modules/axios/dist/node/axios.cjs:2106:12)\n    at IncomingMessage.handleStreamEnd (/Users/mohiuddin/Documents/Side Projects/Intelligent Vendor management System/backend/node_modules/axios/dist/node/axios.cjs:3491:11)\n    at IncomingMessage.emit (node:events:520:35)\n    at endReadableNT (node:internal/streams/readable:1701:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)\n    at Axios.request (/Users/mohiuddin/Documents/Side Projects/Intelligent Vendor management System/backend/node_modules/axios/dist/node/axios.cjs:4731:41)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async TestRunner.apiCall (/Users/mohiuddin/Documents/Side Projects/Intelligent Vendor management System/backend/tests/full-test-campaign.js:142:26)\n    at async /Users/mohiuddin/Documents/Side Projects/Intelligent Vendor management System/backend/tests/full-test-campaign.js:539:24\n    at async TestRunner.execute (/Users/mohiuddin/Documents/Side Projects/Intelligent Vendor management System/backend/tests/full-test-campaign.js:85:7)\n    at async testAutomatedInvoicingE2E (/Users/mohiuddin/Documents/Side Projects/Intelligent Vendor management System/backend/tests/full-test-campaign.js:530:3)\n    at async phaseC_E2EFlows (/Users/mohiuddin/Documents/Side Projects/Intelligent Vendor management System/backend/tests/full-test-campaign.js:413:3)\n    at async runFullTestCampaign (/Users/mohiuddin/Documents/Side Projects/Intelligent Vendor management System/backend/tests/full-test-campaign.js:900:7)",
+      "duration": 4005,
+      "logs": [
+        {
+          "timestamp": "2025-12-05T21:00:11.301Z",
+          "level": "info",
+          "message": "Starting test: C2.3: Duplicate Detection"
+        },
+        {
+          "timestamp": "2025-12-05T21:00:11.302Z",
+          "level": "warn",
+          "message": "API call failed (attempt 1/3): Request failed with status code 401"
+        },
+        {
+          "timestamp": "2025-12-05T21:00:13.305Z",
+          "level": "warn",
+          "message": "API call failed (attempt 2/3): Request failed with status code 401"
+        },
+        {
+          "timestamp": "2025-12-05T21:00:15.306Z",
+          "level": "warn",
+          "message": "API call failed (attempt 3/3): Request failed with status code 401"
+        },
+        {
+          "timestamp": "2025-12-05T21:00:15.306Z",
+          "level": "error",
+          "message": "❌ FAILED: Request failed with status code 401"
+        }
+      ],
+      "requests": [
+        {
+          "timestamp": "2025-12-05T21:00:11.301Z",
+          "method": "POST",
+          "endpoint": "/api/invoices/submit",
+          "data": {
+            "vendor_id": "V-001",
+            "invoice_number": "INV-2024-12-001",
+            "invoice_date": "2024-12-06",
+            "total_amount": 12500
+          },
+          "headers": {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer "
+          }
+        }
+      ],
+      "responses": [],
+      "timestamp": "2025-12-05T21:00:15.306Z",
+      "reproductionSteps": "1. POST /api/invoices/submit with data: {\"vendor_id\":\"V-001\",\"invoice_number\":\"INV-2024-12-001\",\"invoice_date\":\"2024-12-06\",\"total_amount\":12500}",
+      "suggestedFix": "Authentication failed. Ensure valid Firebase token is provided."
+    },
+    {
+      "test": "C4.2: Anomaly Detection",
+      "severity": "major",
+      "error": "Request failed with status code 401",
+      "stack": "AxiosError: Request failed with status code 401\n    at settle (/Users/mohiuddin/Documents/Side Projects/Intelligent Vendor management System/backend/node_modules/axios/dist/node/axios.cjs:2106:12)\n    at IncomingMessage.handleStreamEnd (/Users/mohiuddin/Documents/Side Projects/Intelligent Vendor management System/backend/node_modules/axios/dist/node/axios.cjs:3491:11)\n    at IncomingMessage.emit (node:events:520:35)\n    at endReadableNT (node:internal/streams/readable:1701:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)\n    at Axios.request (/Users/mohiuddin/Documents/Side Projects/Intelligent Vendor management System/backend/node_modules/axios/dist/node/axios.cjs:4731:41)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async TestRunner.apiCall (/Users/mohiuddin/Documents/Side Projects/Intelligent Vendor management System/backend/tests/full-test-campaign.js:142:26)\n    at async /Users/mohiuddin/Documents/Side Projects/Intelligent Vendor management System/backend/tests/full-test-campaign.js:654:24\n    at async TestRunner.execute (/Users/mohiuddin/Documents/Side Projects/Intelligent Vendor management System/backend/tests/full-test-campaign.js:85:7)\n    at async testPredictiveAnalyticsE2E (/Users/mohiuddin/Documents/Side Projects/Intelligent Vendor management System/backend/tests/full-test-campaign.js:652:3)\n    at async phaseC_E2EFlows (/Users/mohiuddin/Documents/Side Projects/Intelligent Vendor management System/backend/tests/full-test-campaign.js:419:3)\n    at async runFullTestCampaign (/Users/mohiuddin/Documents/Side Projects/Intelligent Vendor management System/backend/tests/full-test-campaign.js:900:7)",
+      "duration": 4009,
+      "logs": [
+        {
+          "timestamp": "2025-12-05T21:00:27.338Z",
+          "level": "info",
+          "message": "Starting test: C4.2: Anomaly Detection"
+        },
+        {
+          "timestamp": "2025-12-05T21:00:27.339Z",
+          "level": "warn",
+          "message": "API call failed (attempt 1/3): Request failed with status code 401"
+        },
+        {
+          "timestamp": "2025-12-05T21:00:29.343Z",
+          "level": "warn",
+          "message": "API call failed (attempt 2/3): Request failed with status code 401"
+        },
+        {
+          "timestamp": "2025-12-05T21:00:31.347Z",
+          "level": "warn",
+          "message": "API call failed (attempt 3/3): Request failed with status code 401"
+        },
+        {
+          "timestamp": "2025-12-05T21:00:31.347Z",
+          "level": "error",
+          "message": "❌ FAILED: Request failed with status code 401"
+        }
+      ],
+      "requests": [
+        {
+          "timestamp": "2025-12-05T21:00:27.338Z",
+          "method": "GET",
+          "endpoint": "/api/predictions/anomalies",
+          "data": null,
+          "headers": {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer "
+          }
+        }
+      ],
+      "responses": [],
+      "timestamp": "2025-12-05T21:00:31.347Z",
+      "reproductionSteps": "1. GET /api/predictions/anomalies",
+      "suggestedFix": "Authentication failed. Ensure valid Firebase token is provided."
+    },
+    {
+      "test": "D2: Model Explainability",
+      "severity": "major",
+      "error": "Request failed with status code 401",
+      "stack": "AxiosError: Request failed with status code 401\n    at settle (/Users/mohiuddin/Documents/Side Projects/Intelligent Vendor management System/backend/node_modules/axios/dist/node/axios.cjs:2106:12)\n    at IncomingMessage.handleStreamEnd (/Users/mohiuddin/Documents/Side Projects/Intelligent Vendor management System/backend/node_modules/axios/dist/node/axios.cjs:3491:11)\n    at IncomingMessage.emit (node:events:520:35)\n    at endReadableNT (node:internal/streams/readable:1701:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)\n    at Axios.request (/Users/mohiuddin/Documents/Side Projects/Intelligent Vendor management System/backend/node_modules/axios/dist/node/axios.cjs:4731:41)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async TestRunner.apiCall (/Users/mohiuddin/Documents/Side Projects/Intelligent Vendor management System/backend/tests/full-test-campaign.js:142:26)\n    at async /Users/mohiuddin/Documents/Side Projects/Intelligent Vendor management System/backend/tests/full-test-campaign.js:700:24\n    at async TestRunner.execute (/Users/mohiuddin/Documents/Side Projects/Intelligent Vendor management System/backend/tests/full-test-campaign.js:85:7)\n    at async phaseD_AIModelChecks (/Users/mohiuddin/Documents/Side Projects/Intelligent Vendor management System/backend/tests/full-test-campaign.js:696:3)\n    at async runFullTestCampaign (/Users/mohiuddin/Documents/Side Projects/Intelligent Vendor management System/backend/tests/full-test-campaign.js:901:7)",
+      "duration": 4009,
+      "logs": [
+        {
+          "timestamp": "2025-12-05T21:00:31.347Z",
+          "level": "info",
+          "message": "Starting test: D2: Model Explainability"
+        },
+        {
+          "timestamp": "2025-12-05T21:00:31.347Z",
+          "level": "info",
+          "message": "Verifying feature contribution explainability"
+        },
+        {
+          "timestamp": "2025-12-05T21:00:31.349Z",
+          "level": "warn",
+          "message": "API call failed (attempt 1/3): Request failed with status code 401"
+        },
+        {
+          "timestamp": "2025-12-05T21:00:33.353Z",
+          "level": "warn",
+          "message": "API call failed (attempt 2/3): Request failed with status code 401"
+        },
+        {
+          "timestamp": "2025-12-05T21:00:35.356Z",
+          "level": "warn",
+          "message": "API call failed (attempt 3/3): Request failed with status code 401"
+        },
+        {
+          "timestamp": "2025-12-05T21:00:35.356Z",
+          "level": "error",
+          "message": "❌ FAILED: Request failed with status code 401"
+        }
+      ],
+      "requests": [
+        {
+          "timestamp": "2025-12-05T21:00:31.347Z",
+          "method": "GET",
+          "endpoint": "/api/predictions/forecast/spend",
+          "data": null,
+          "headers": {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer "
+          }
+        }
+      ],
+      "responses": [],
+      "timestamp": "2025-12-05T21:00:35.356Z",
+      "reproductionSteps": "1. GET /api/predictions/forecast/spend",
+      "suggestedFix": "Authentication failed. Ensure valid Firebase token is provided."
+    },
+    {
+      "test": "E3: Performance - Invoice Processing",
+      "severity": "major",
+      "error": "Request failed with status code 401",
+      "stack": "AxiosError: Request failed with status code 401\n    at settle (/Users/mohiuddin/Documents/Side Projects/Intelligent Vendor management System/backend/node_modules/axios/dist/node/axios.cjs:2106:12)\n    at IncomingMessage.handleStreamEnd (/Users/mohiuddin/Documents/Side Projects/Intelligent Vendor management System/backend/node_modules/axios/dist/node/axios.cjs:3491:11)\n    at IncomingMessage.emit (node:events:520:35)\n    at endReadableNT (node:internal/streams/readable:1701:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)\n    at Axios.request (/Users/mohiuddin/Documents/Side Projects/Intelligent Vendor management System/backend/node_modules/axios/dist/node/axios.cjs:4731:41)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async TestRunner.apiCall (/Users/mohiuddin/Documents/Side Projects/Intelligent Vendor management System/backend/tests/full-test-campaign.js:142:26)\n    at async /Users/mohiuddin/Documents/Side Projects/Intelligent Vendor management System/backend/tests/full-test-campaign.js:790:24\n    at async TestRunner.execute (/Users/mohiuddin/Documents/Side Projects/Intelligent Vendor management System/backend/tests/full-test-campaign.js:85:7)\n    at async phaseE_SecurityPerformance (/Users/mohiuddin/Documents/Side Projects/Intelligent Vendor management System/backend/tests/full-test-campaign.js:780:3)\n    at async runFullTestCampaign (/Users/mohiuddin/Documents/Side Projects/Intelligent Vendor management System/backend/tests/full-test-campaign.js:902:7)",
+      "duration": 4011,
+      "logs": [
+        {
+          "timestamp": "2025-12-05T21:00:43.377Z",
+          "level": "info",
+          "message": "Starting test: E3: Performance - Invoice Processing"
+        },
+        {
+          "timestamp": "2025-12-05T21:00:43.379Z",
+          "level": "warn",
+          "message": "API call failed (attempt 1/3): Request failed with status code 401"
+        },
+        {
+          "timestamp": "2025-12-05T21:00:45.383Z",
+          "level": "warn",
+          "message": "API call failed (attempt 2/3): Request failed with status code 401"
+        },
+        {
+          "timestamp": "2025-12-05T21:00:47.388Z",
+          "level": "warn",
+          "message": "API call failed (attempt 3/3): Request failed with status code 401"
+        },
+        {
+          "timestamp": "2025-12-05T21:00:47.388Z",
+          "level": "error",
+          "message": "❌ FAILED: Request failed with status code 401"
+        }
+      ],
+      "requests": [
+        {
+          "timestamp": "2025-12-05T21:00:43.377Z",
+          "method": "POST",
+          "endpoint": "/api/invoices/submit",
+          "data": {
+            "vendor_id": "PERF-TEST",
+            "invoice_number": "PERF-001",
+            "total_amount": 1000
+          },
+          "headers": {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer "
+          }
+        }
+      ],
+      "responses": [],
+      "timestamp": "2025-12-05T21:00:47.388Z",
+      "reproductionSteps": "1. POST /api/invoices/submit with data: {\"vendor_id\":\"PERF-TEST\",\"invoice_number\":\"PERF-001\",\"total_amount\":1000}",
+      "suggestedFix": "Authentication failed. Ensure valid Firebase token is provided."
+    },
+    {
+      "test": "F1: Frontend Availability",
+      "severity": "major",
+      "error": "timeout of 5000ms exceeded",
+      "stack": "AxiosError: timeout of 5000ms exceeded\n    at RedirectableRequest.handleRequestTimeout (/Users/mohiuddin/Documents/Side Projects/Intelligent Vendor management System/backend/node_modules/axios/dist/node/axios.cjs:3552:15)\n    at RedirectableRequest.emit (node:events:508:28)\n    at Timeout._onTimeout (/Users/mohiuddin/Documents/Side Projects/Intelligent Vendor management System/backend/node_modules/follow-redirects/index.js:221:12)\n    at listOnTimeout (node:internal/timers:608:17)\n    at process.processTimers (node:internal/timers:543:7)\n    at Axios.request (/Users/mohiuddin/Documents/Side Projects/Intelligent Vendor management System/backend/node_modules/axios/dist/node/axios.cjs:4731:41)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async /Users/mohiuddin/Documents/Side Projects/Intelligent Vendor management System/backend/tests/full-test-campaign.js:835:24\n    at async TestRunner.execute (/Users/mohiuddin/Documents/Side Projects/Intelligent Vendor management System/backend/tests/full-test-campaign.js:85:7)\n    at async phaseF_UXAccessibility (/Users/mohiuddin/Documents/Side Projects/Intelligent Vendor management System/backend/tests/full-test-campaign.js:833:3)\n    at async runFullTestCampaign (/Users/mohiuddin/Documents/Side Projects/Intelligent Vendor management System/backend/tests/full-test-campaign.js:903:7)",
+      "duration": 5005,
+      "logs": [
+        {
+          "timestamp": "2025-12-05T21:00:47.388Z",
+          "level": "info",
+          "message": "Starting test: F1: Frontend Availability"
+        },
+        {
+          "timestamp": "2025-12-05T21:00:52.393Z",
+          "level": "error",
+          "message": "❌ FAILED: timeout of 5000ms exceeded"
+        }
+      ],
+      "requests": [],
+      "responses": [],
+      "timestamp": "2025-12-05T21:00:52.393Z",
+      "reproductionSteps": "",
+      "suggestedFix": "Server error. Check backend logs for detailed error message."
+    }
+  ],
+  "warnings": [],
+  "performance": {},
+  "startTime": "2025-12-05T20:59:47.218Z",
+  "endTime": "2025-12-05T21:00:52.394Z"
+}
