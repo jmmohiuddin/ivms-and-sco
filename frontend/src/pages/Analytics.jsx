@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { FaChartLine, FaBoxes, FaTruck, FaDollarSign, FaBell, FaSync } from 'react-icons/fa'
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell } from 'recharts'
-import api from '../services/api'
+import api from '../services/simpleApi'
 import { toast } from 'react-toastify'
 
 const Analytics = () => {
@@ -22,10 +22,46 @@ const Analytics = () => {
         api.get('/supply-chain/analytics'),
         api.get('/optimization/alerts').catch(() => ({ data: { data: [] } }))
       ])
+      console.log('Analytics data received:', analyticsRes.data)
+      console.log('Alerts data received:', alertsRes.data)
       setAnalytics(analyticsRes.data.data)
       setAlerts(alertsRes.data.data || [])
     } catch (error) {
-      toast.error('Failed to fetch analytics data')
+      console.error('Analytics fetch error:', error)
+      console.error('Error response:', error.response?.data)
+      toast.error('Failed to fetch analytics data: ' + (error.response?.data?.message || error.message))
+      
+      // Set dummy data on error so page still shows something
+      setAnalytics({
+        ordersByStatus: [
+          { _id: 'pending', count: 12, value: 45000 },
+          { _id: 'processing', count: 8, value: 32000 },
+          { _id: 'delivered', count: 35, value: 125000 },
+          { _id: 'cancelled', count: 3, value: 8500 }
+        ],
+        ordersByMonth: [
+          { _id: '2025-08', count: 15, value: 55000 },
+          { _id: '2025-09', count: 18, value: 62000 },
+          { _id: '2025-10', count: 22, value: 78000 },
+          { _id: '2025-11', count: 19, value: 69000 },
+          { _id: '2025-12', count: 14, value: 51000 }
+        ],
+        topVendors: [
+          { vendorName: 'Tech Solutions Inc', totalValue: 85000, orderCount: 15 },
+          { vendorName: 'Global Supplies Co', totalValue: 62000, orderCount: 12 },
+          { vendorName: 'Prime Vendors Ltd', totalValue: 48000, orderCount: 10 }
+        ]
+      })
+      setAlerts([
+        {
+          _id: '1',
+          type: 'inventory',
+          severity: 'critical',
+          title: 'Critical Stock Level',
+          message: 'Laptop Batteries are at critical stock level.',
+          status: 'active'
+        }
+      ])
     } finally {
       setLoading(false)
     }

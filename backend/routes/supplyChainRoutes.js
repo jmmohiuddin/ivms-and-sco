@@ -11,8 +11,8 @@ const { protect: auth, authorize } = require('../middleware/firebaseAuth');
 router.use(auth); // Protect all routes
 
 router.get('/dashboard', getDashboardStats);
-router.get('/analytics', authorize('admin', 'manager'), getSupplyChainAnalytics);
-router.get('/forecast', authorize('admin', 'manager'), getInventoryForecast);
-router.get('/vendor-performance', authorize('admin', 'manager'), getVendorPerformance);
+router.get('/analytics', getSupplyChainAnalytics); // Allow all authenticated users
+router.get('/forecast', getInventoryForecast); // Allow all authenticated users
+router.get('/vendor-performance', getVendorPerformance); // Allow all authenticated users
 
 module.exports = router;

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { FaPlus, FaEdit, FaTrash, FaSearch, FaFilter, FaExclamationTriangle, FaBox } from 'react-icons/fa'
-import api from '../services/api'
+import api from '../services/simpleApi'
 import { toast } from 'react-toastify'
 
 const Products = () => {
@@ -15,19 +15,36 @@ const Products = () => {
 
   useEffect(() => {
     fetchData()
+    
+    // Fallback timeout to prevent infinite loading
+    const timeout = setTimeout(() => {
+      console.log('Timeout: forcing loading to false')
+      setLoading(false)
+    }, 10000) // 10 seconds
+    
+    return () => clearTimeout(timeout)
   }, [])
 
   const fetchData = async () => {
     try {
+      console.log('Fetching products and vendors...')
       const [productsRes, vendorsRes] = await Promise.all([
-        api.get('/products'),
-        api.get('/vendors')
+        api.get('/products?limit=100'), // Get more products
+        api.get('/vendors?limit=100')
       ])
+      console.log('Products received:', productsRes.data.count)
+      console.log('Vendors received:', vendorsRes.data.count)
       setProducts(productsRes.data.data || [])
       setVendors(vendorsRes.data.data || [])
     } catch (error) {
-      toast.error('Failed to fetch data')
+      console.error('Error fetching data:', error)
+      console.error('Error response:', error.response?.data)
+      toast.error('Failed to fetch data: ' + (error.response?.data?.message || error.message))
+      // Set empty arrays so the page still renders
+      setProducts([])
+      setVendors([])
     } finally {
+      console.log('Setting loading to false')
       setLoading(false)
     }
   }
@@ -49,8 +66,11 @@ const Products = () => {
   }
 
   const getStockStatus = (product) => {
-    if (product.stockQuantity <= 0) return { label: 'Out of Stock', color: 'bg-red-100 text-red-800' }
-    if (product.stockQuantity <= product.reorderLevel) return { label: 'Low Stock', color: 'bg-yellow-100 text-yellow-800' }
+    const quantity = product.inventory?.quantity || product.stockQuantity || 0
+    const reorderPoint = product.inventory?.reorderPoint || product.reorderLevel || 0
+    
+    if (quantity <= 0) return { label: 'Out of Stock', color: 'bg-red-100 text-red-800' }
+    if (quantity <= reorderPoint) return { label: 'Low Stock', color: 'bg-yellow-100 text-yellow-800' }
     return { label: 'In Stock', color: 'bg-green-100 text-green-800' }
   }
 
@@ -67,8 +87,20 @@ const Products = () => {
   })
 
   const categories = [...new Set(products.map(p => p.category).filter(Boolean))]
-  const lowStockCount = products.filter(p => p.stockQuantity <= p.reorderLevel && p.stockQuantity > 0).length
-  const outOfStockCount = products.filter(p => p.stockQuantity <= 0).length
+  const lowStockCount = products.filter(p => {
+    const quantity = p.inventory?.quantity || p.stockQuantity || 0
+    const reorderPoint = p.inventory?.reorderPoint || p.reorderLevel || 0
+    return quantity <= reorderPoint && quantity > 0
+  }).length
+  const outOfStockCount = products.filter(p => (p.inventory?.quantity || p.stockQuantity || 0) <= 0).length
+
+  console.log('Products state:', {
+    loading,
+    productsCount: products.length,
+    vendorsCount: vendors.length,
+    filteredCount: filteredProducts.length,
+    categories: categories.length
+  })
 
   if (loading) {
     return (
@@ -219,17 +251,22 @@ const Products = () => {
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-600">{product.sku || 'N/A'}</td>
                     <td className="px-6 py-4 text-sm text-gray-600">{product.category || 'Uncategorized'}</td>
-                    <td className="px-6 py-4 text-sm font-medium text-gray-900">${product.price?.toFixed(2)}</td>
+                    <td className="px-6 py-4 text-sm font-medium text-gray-900">
+                      ${(product.price?.selling || product.price?.cost || product.price || 0).toFixed(2)}
+                    </td>
                     <td className="px-6 py-4">
                       <div className="text-sm">
-                        <span className="font-medium">{product.stockQuantity}</span>
-                        <span className="text-gray-500"> / {product.reorderLevel} min</span>
+                        <span className="font-medium">{product.inventory?.quantity || product.stockQuantity || 0}</span>
+                        <span className="text-gray-500"> / {product.inventory?.reorderPoint || product.reorderLevel || 0} min</span>
                       </div>
                     </td>
                     <td className="px-6 py-4">
                       <span className={`px-2 py-1 text-xs font-medium rounded-full ${stockStatus.color}`}>
                         {stockStatus.label}
                       </span>
+                    </td>
+                    <td className="px-6 py-4 text-sm text-gray-600">
+                      {product.vendor?.name || vendors.find(v => v._id === product.vendor)?. name || 'N/A'}
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-600">
                       {product.vendor?.name || 'N/A'}
@@ -277,12 +314,13 @@ const ProductModal = ({ product, vendors, onClose, onSave }) => {
     sku: product?.sku || '',
     description: product?.description || '',
     category: product?.category || '',
-    price: product?.price || '',
-    cost: product?.cost || '',
-    stockQuantity: product?.stockQuantity || 0,
-    reorderLevel: product?.reorderLevel || 10,
-    vendor: product?.vendor?._id || '',
-    unit: product?.unit || 'piece'
+    price: product?.price?.selling || product?.price || '',
+    cost: product?.price?.cost || product?.cost || '',
+    stockQuantity: product?.inventory?.quantity || product?.stockQuantity || 0,
+    reorderLevel: product?.inventory?.reorderPoint || product?.reorderLevel || 10,
+    maxStock: product?.inventory?.maxStock || 100,
+    vendor: product?.vendor?._id || product?.vendor || '',
+    unit: product?.inventory?.unit || product?.unit || 'units'
   })
   const [saving, setSaving] = useState(false)
 
@@ -296,11 +334,23 @@ const ProductModal = ({ product, vendors, onClose, onSave }) => {
     setSaving(true)
     try {
       const data = {
-        ...formData,
-        price: parseFloat(formData.price),
-        cost: parseFloat(formData.cost) || 0,
-        stockQuantity: parseInt(formData.stockQuantity),
-        reorderLevel: parseInt(formData.reorderLevel)
+        name: formData.name,
+        sku: formData.sku,
+        description: formData.description,
+        category: formData.category,
+        vendor: formData.vendor,
+        price: {
+          cost: parseFloat(formData.cost) || 0,
+          selling: parseFloat(formData.price) || 0,
+          currency: 'USD'
+        },
+        inventory: {
+          quantity: parseInt(formData.stockQuantity) || 0,
+          reorderPoint: parseInt(formData.reorderLevel) || 10,
+          maxStock: parseInt(formData.maxStock) || 100,
+          unit: formData.unit
+        },
+        status: 'active'
       }
       if (product) {
         await api.put(`/products/${product._id}`, data)

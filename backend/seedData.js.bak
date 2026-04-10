@@ -1,0 +1,510 @@
+const mongoose = require('mongoose');
+require('dotenv').config();
+
+// Connect to MongoDB
+mongoose.connect(process.env.MONGODB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+})
+.then(() => console.log('✅ MongoDB Connected'))
+.catch(err => {
+  console.error('❌ MongoDB connection error:', err);
+  process.exit(1);
+});
+
+// Define schemas inline for seeding
+const vendorSchema = new mongoose.Schema({
+  name: String,
+  email: String,
+  phone: String,
+  address: {
+    street: String,
+    city: String,
+    state: String,
+    zipCode: String,
+    country: String
+  },
+  contactPerson: {
+    name: String,
+    email: String,
+    phone: String
+  },
+  status: {
+    type: String,
+    enum: ['active', 'inactive', 'pending', 'suspended'],
+    default: 'active'
+  },
+  category: String,
+  rating: {
+    type: Number,
+    min: 0,
+    max: 5,
+    default: 0
+  },
+  performanceScore: {
+    type: Number,
+    min: 0,
+    max: 100,
+    default: 0
+  },
+  paymentTerms: String,
+  taxId: String,
+  website: String,
+  notes: String,
+  documents: [{
+    name: String,
+    type: String,
+    url: String,
+    uploadedAt: Date
+  }],
+  metrics: {
+    totalOrders: { type: Number, default: 0 },
+    totalValue: { type: Number, default: 0 },
+    avgDeliveryTime: { type: Number, default: 0 },
+    onTimeDeliveryRate: { type: Number, default: 0 }
+  }
+}, { timestamps: true });
+
+const productSchema = new mongoose.Schema({
+  name: String,
+  sku: String,
+  description: String,
+  category: String,
+  vendor: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Vendor'
+  },
+  price: {
+    cost: Number,
+    selling: Number,
+    currency: { type: String, default: 'USD' }
+  },
+  inventory: {
+    quantity: { type: Number, default: 0 },
+    reorderPoint: { type: Number, default: 10 },
+    maxStock: { type: Number, default: 100 },
+    unit: { type: String, default: 'units' }
+  },
+  specifications: mongoose.Schema.Types.Mixed,
+  leadTime: { type: Number, default: 7 },
+  status: {
+    type: String,
+    enum: ['active', 'inactive', 'discontinued'],
+    default: 'active'
+  }
+}, { timestamps: true });
+
+const Vendor = mongoose.model('Vendor', vendorSchema);
+const Product = mongoose.model('Product', productSchema);
+
+// Dummy data
+const dummyVendors = [
+  {
+    name: 'Tech Solutions Inc',
+    email: 'contact@techsolutions.com',
+    phone: '+1-555-0101',
+    address: {
+      street: '123 Tech Street',
+      city: 'San Francisco',
+      state: 'CA',
+      zipCode: '94102',
+      country: 'USA'
+    },
+    contactPerson: {
+      name: 'John Smith',
+      email: 'john@techsolutions.com',
+      phone: '+1-555-0102'
+    },
+    status: 'active',
+    category: 'Electronics',
+    rating: 4.5,
+    performanceScore: 92,
+    paymentTerms: 'Net 30',
+    taxId: 'TAX-001',
+    website: 'https://techsolutions.com',
+    metrics: {
+      totalOrders: 45,
+      totalValue: 125000,
+      avgDeliveryTime: 5,
+      onTimeDeliveryRate: 95
+    }
+  },
+  {
+    name: 'Global Supplies Co',
+    email: 'info@globalsupplies.com',
+    phone: '+1-555-0201',
+    address: {
+      street: '456 Supply Avenue',
+      city: 'New York',
+      state: 'NY',
+      zipCode: '10001',
+      country: 'USA'
+    },
+    contactPerson: {
+      name: 'Sarah Johnson',
+      email: 'sarah@globalsupplies.com',
+      phone: '+1-555-0202'
+    },
+    status: 'active',
+    category: 'Office Supplies',
+    rating: 4.2,
+    performanceScore: 88,
+    paymentTerms: 'Net 45',
+    taxId: 'TAX-002',
+    website: 'https://globalsupplies.com',
+    metrics: {
+      totalOrders: 38,
+      totalValue: 95000,
+      avgDeliveryTime: 7,
+      onTimeDeliveryRate: 89
+    }
+  },
+  {
+    name: 'Prime Vendors Ltd',
+    email: 'sales@primevendors.com',
+    phone: '+1-555-0301',
+    address: {
+      street: '789 Commerce Blvd',
+      city: 'Chicago',
+      state: 'IL',
+      zipCode: '60601',
+      country: 'USA'
+    },
+    contactPerson: {
+      name: 'Michael Brown',
+      email: 'michael@primevendors.com',
+      phone: '+1-555-0302'
+    },
+    status: 'active',
+    category: 'Industrial Equipment',
+    rating: 4.7,
+    performanceScore: 94,
+    paymentTerms: 'Net 30',
+    taxId: 'TAX-003',
+    website: 'https://primevendors.com',
+    metrics: {
+      totalOrders: 52,
+      totalValue: 180000,
+      avgDeliveryTime: 4,
+      onTimeDeliveryRate: 97
+    }
+  },
+  {
+    name: 'Quality Parts Corp',
+    email: 'contact@qualityparts.com',
+    phone: '+1-555-0401',
+    address: {
+      street: '321 Parts Lane',
+      city: 'Houston',
+      state: 'TX',
+      zipCode: '77001',
+      country: 'USA'
+    },
+    contactPerson: {
+      name: 'Emily Davis',
+      email: 'emily@qualityparts.com',
+      phone: '+1-555-0402'
+    },
+    status: 'active',
+    category: 'Auto Parts',
+    rating: 4.3,
+    performanceScore: 86,
+    paymentTerms: 'Net 60',
+    taxId: 'TAX-004',
+    website: 'https://qualityparts.com',
+    metrics: {
+      totalOrders: 29,
+      totalValue: 72000,
+      avgDeliveryTime: 6,
+      onTimeDeliveryRate: 91
+    }
+  },
+  {
+    name: 'Reliable Materials',
+    email: 'orders@reliablematerials.com',
+    phone: '+1-555-0501',
+    address: {
+      street: '654 Material Road',
+      city: 'Seattle',
+      state: 'WA',
+      zipCode: '98101',
+      country: 'USA'
+    },
+    contactPerson: {
+      name: 'David Wilson',
+      email: 'david@reliablematerials.com',
+      phone: '+1-555-0502'
+    },
+    status: 'active',
+    category: 'Raw Materials',
+    rating: 4.1,
+    performanceScore: 82,
+    paymentTerms: 'Net 30',
+    taxId: 'TAX-005',
+    website: 'https://reliablematerials.com',
+    metrics: {
+      totalOrders: 33,
+      totalValue: 68000,
+      avgDeliveryTime: 8,
+      onTimeDeliveryRate: 85
+    }
+  },
+  {
+    name: 'Express Components',
+    email: 'service@expresscomponents.com',
+    phone: '+1-555-0601',
+    address: {
+      street: '987 Component Way',
+      city: 'Boston',
+      state: 'MA',
+      zipCode: '02101',
+      country: 'USA'
+    },
+    contactPerson: {
+      name: 'Lisa Martinez',
+      email: 'lisa@expresscomponents.com',
+      phone: '+1-555-0602'
+    },
+    status: 'active',
+    category: 'Electronics',
+    rating: 4.6,
+    performanceScore: 91,
+    paymentTerms: 'Net 30',
+    taxId: 'TAX-006',
+    website: 'https://expresscomponents.com',
+    metrics: {
+      totalOrders: 41,
+      totalValue: 110000,
+      avgDeliveryTime: 3,
+      onTimeDeliveryRate: 96
+    }
+  }
+];
+
+const seedDatabase = async () => {
+  try {
+    console.log('🌱 Starting database seeding...\n');
+
+    // Clear existing data
+    console.log('🗑️  Clearing existing vendors and products...');
+    await Vendor.deleteMany({});
+    await Product.deleteMany({});
+    console.log('✅ Cleared existing data\n');
+
+    // Insert vendors
+    console.log('👥 Inserting vendors...');
+    const vendors = await Vendor.insertMany(dummyVendors);
+    console.log(`✅ Inserted ${vendors.length} vendors\n`);
+
+    // Create products for each vendor
+    const dummyProducts = [];
+    
+    // Tech Solutions Inc - Electronics
+    dummyProducts.push(
+      {
+        name: 'Laptop Battery Pack',
+        sku: 'LB-001',
+        description: 'High-capacity lithium-ion battery for laptops',
+        category: 'Electronics',
+        vendor: vendors[0]._id,
+        price: { cost: 45.00, selling: 89.99 },
+        inventory: { quantity: 150, reorderPoint: 30, maxStock: 300 },
+        leadTime: 5,
+        status: 'active'
+      },
+      {
+        name: 'USB-C Cable 6ft',
+        sku: 'UC-002',
+        description: 'Fast charging USB-C to USB-C cable',
+        category: 'Electronics',
+        vendor: vendors[0]._id,
+        price: { cost: 8.00, selling: 19.99 },
+        inventory: { quantity: 450, reorderPoint: 100, maxStock: 800 },
+        leadTime: 3,
+        status: 'active'
+      },
+      {
+        name: 'Wireless Mouse',
+        sku: 'WM-003',
+        description: 'Ergonomic wireless optical mouse',
+        category: 'Electronics',
+        vendor: vendors[0]._id,
+        price: { cost: 15.00, selling: 34.99 },
+        inventory: { quantity: 280, reorderPoint: 50, maxStock: 400 },
+        leadTime: 5,
+        status: 'active'
+      }
+    );
+
+    // Global Supplies Co - Office Supplies
+    dummyProducts.push(
+      {
+        name: 'Office Chair Deluxe',
+        sku: 'OC-004',
+        description: 'Ergonomic office chair with lumbar support',
+        category: 'Office Furniture',
+        vendor: vendors[1]._id,
+        price: { cost: 120.00, selling: 249.99 },
+        inventory: { quantity: 45, reorderPoint: 15, maxStock: 100 },
+        leadTime: 10,
+        status: 'active'
+      },
+      {
+        name: 'Desk Lamp LED',
+        sku: 'DL-005',
+        description: 'Adjustable LED desk lamp with touch controls',
+        category: 'Office Supplies',
+        vendor: vendors[1]._id,
+        price: { cost: 22.00, selling: 49.99 },
+        inventory: { quantity: 180, reorderPoint: 40, maxStock: 300 },
+        leadTime: 7,
+        status: 'active'
+      },
+      {
+        name: 'Filing Cabinet 4-Drawer',
+        sku: 'FC-006',
+        description: 'Metal filing cabinet with lock',
+        category: 'Office Furniture',
+        vendor: vendors[1]._id,
+        price: { cost: 85.00, selling: 179.99 },
+        inventory: { quantity: 32, reorderPoint: 10, maxStock: 60 },
+        leadTime: 14,
+        status: 'active'
+      }
+    );
+
+    // Prime Vendors Ltd - Industrial Equipment
+    dummyProducts.push(
+      {
+        name: 'Industrial Router',
+        sku: 'IR-007',
+        description: 'Heavy-duty CNC router for industrial use',
+        category: 'Industrial Equipment',
+        vendor: vendors[2]._id,
+        price: { cost: 3500.00, selling: 7499.99 },
+        inventory: { quantity: 8, reorderPoint: 3, maxStock: 15 },
+        leadTime: 30,
+        status: 'active'
+      },
+      {
+        name: 'Safety Harness',
+        sku: 'SH-008',
+        description: 'Full-body safety harness for industrial work',
+        category: 'Safety Equipment',
+        vendor: vendors[2]._id,
+        price: { cost: 65.00, selling: 139.99 },
+        inventory: { quantity: 95, reorderPoint: 25, maxStock: 150 },
+        leadTime: 7,
+        status: 'active'
+      }
+    );
+
+    // Quality Parts Corp - Auto Parts
+    dummyProducts.push(
+      {
+        name: 'Brake Pad Set',
+        sku: 'BP-009',
+        description: 'Ceramic brake pads for passenger vehicles',
+        category: 'Auto Parts',
+        vendor: vendors[3]._id,
+        price: { cost: 35.00, selling: 79.99 },
+        inventory: { quantity: 220, reorderPoint: 50, maxStock: 400 },
+        leadTime: 5,
+        status: 'active'
+      },
+      {
+        name: 'Oil Filter Premium',
+        sku: 'OF-010',
+        description: 'High-efficiency oil filter',
+        category: 'Auto Parts',
+        vendor: vendors[3]._id,
+        price: { cost: 8.50, selling: 18.99 },
+        inventory: { quantity: 580, reorderPoint: 150, maxStock: 1000 },
+        leadTime: 3,
+        status: 'active'
+      }
+    );
+
+    // Reliable Materials - Raw Materials
+    dummyProducts.push(
+      {
+        name: 'Steel Sheet 4x8',
+        sku: 'SS-011',
+        description: 'Cold-rolled steel sheet',
+        category: 'Raw Materials',
+        vendor: vendors[4]._id,
+        price: { cost: 125.00, selling: 279.99 },
+        inventory: { quantity: 65, reorderPoint: 20, maxStock: 120 },
+        leadTime: 14,
+        status: 'active'
+      },
+      {
+        name: 'Aluminum Rod 1inch',
+        sku: 'AR-012',
+        description: '6061 aluminum rod 1 inch diameter',
+        category: 'Raw Materials',
+        vendor: vendors[4]._id,
+        price: { cost: 15.00, selling: 34.99 },
+        inventory: { quantity: 340, reorderPoint: 80, maxStock: 500 },
+        leadTime: 10,
+        status: 'active'
+      }
+    );
+
+    // Express Components - Electronics
+    dummyProducts.push(
+      {
+        name: 'Network Switch 24-Port',
+        sku: 'NS-013',
+        description: 'Gigabit Ethernet switch 24 ports',
+        category: 'Electronics',
+        vendor: vendors[5]._id,
+        price: { cost: 180.00, selling: 399.99 },
+        inventory: { quantity: 28, reorderPoint: 10, maxStock: 50 },
+        leadTime: 7,
+        status: 'active'
+      },
+      {
+        name: 'HDMI Cable 10ft',
+        sku: 'HC-014',
+        description: '4K HDMI 2.0 cable with Ethernet',
+        category: 'Electronics',
+        vendor: vendors[5]._id,
+        price: { cost: 12.00, selling: 29.99 },
+        inventory: { quantity: 380, reorderPoint: 100, maxStock: 600 },
+        leadTime: 4,
+        status: 'active'
+      },
+      {
+        name: 'Mechanical Keyboard',
+        sku: 'MK-015',
+        description: 'RGB mechanical gaming keyboard',
+        category: 'Electronics',
+        vendor: vendors[5]._id,
+        price: { cost: 55.00, selling: 119.99 },
+        inventory: { quantity: 145, reorderPoint: 40, maxStock: 250 },
+        leadTime: 6,
+        status: 'active'
+      }
+    );
+
+    // Insert products
+    console.log('📦 Inserting products...');
+    const products = await Product.insertMany(dummyProducts);
+    console.log(`✅ Inserted ${products.length} products\n`);
+
+    console.log('✅ Database seeding completed successfully!\n');
+    console.log('Summary:');
+    console.log(`  - ${vendors.length} vendors added`);
+    console.log(`  - ${products.length} products added`);
+    console.log('\nVendors:');
+    vendors.forEach(v => console.log(`  - ${v.name} (${v.category})`));
+    
+    process.exit(0);
+  } catch (error) {
+    console.error('❌ Error seeding database:', error);
+    process.exit(1);
+  }
+};
+
+seedDatabase();

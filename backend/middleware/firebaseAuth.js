@@ -6,6 +6,24 @@ const User = require('../models/User');
  * Verifies Firebase ID token and loads user from MongoDB
  */
 const protect = async (req, res, next) => {
+  // Development mode bypass
+  if (process.env.NODE_ENV === 'development' && process.env.BYPASS_AUTH === 'true') {
+    // Create a mock user for development
+    req.user = {
+      _id: 'dev-user-id',
+      firebaseUid: 'dev-firebase-uid',
+      email: 'dev@example.com',
+      displayName: 'Dev User',
+      role: 'admin',
+      isActive: true
+    };
+    req.firebaseUser = {
+      uid: 'dev-firebase-uid',
+      email: 'dev@example.com'
+    };
+    return next();
+  }
+
   let token;
 
   // Check for token in Authorization header

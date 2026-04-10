@@ -17,8 +17,32 @@ export const AuthProvider = ({ children }) => {
   const [userRole, setUserRole] = useState(null)
 
   useEffect(() => {
+    console.log('AuthContext: Initializing auth listener...')
+    console.log('AuthContext: MODE =', import.meta.env.MODE)
+    
+    // Fallback timeout to prevent infinite loading
+    const loadingTimeout = setTimeout(() => {
+      console.log('AuthContext: Loading timeout reached, forcing mock user')
+      const isDevelopment = import.meta.env.MODE === 'development' || process.env.NODE_ENV === 'development'
+      if (isDevelopment && loading) {
+        setUser({
+          uid: 'dev-user-123',
+          email: 'admin@ivms.com',
+          displayName: 'Admin User',
+          photoURL: null,
+          emailVerified: true,
+          role: 'admin'
+        })
+        setUserRole('admin')
+        setLoading(false)
+      }
+    }, 3000) // 3 second timeout
+    
     // Listen for Firebase auth state changes
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+      clearTimeout(loadingTimeout)
+      console.log('AuthContext: Firebase user state changed:', firebaseUser ? 'logged in' : 'not logged in')
+      
       if (firebaseUser) {
         // Convert Firebase user to app user format
         const appUser = {
@@ -46,9 +70,11 @@ export const AuthProvider = ({ children }) => {
       } else {
         // No Firebase user - check if we're in development mode
         const isDevelopment = import.meta.env.MODE === 'development' || process.env.NODE_ENV === 'development'
+        console.log('AuthContext: isDevelopment =', isDevelopment)
         
         if (isDevelopment) {
           // Set mock user for development when no one is logged in
+          console.log('AuthContext: Setting mock admin user for development')
           setUser({
             uid: 'dev-user-123',
             email: 'admin@ivms.com',
@@ -66,7 +92,10 @@ export const AuthProvider = ({ children }) => {
       setLoading(false)
     })
 
-    return unsubscribe
+    return () => {
+      clearTimeout(loadingTimeout)
+      unsubscribe()
+    }
   }, [])
 
   const login = async (email, password) => {

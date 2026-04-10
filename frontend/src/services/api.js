@@ -2,7 +2,7 @@ import axios from 'axios'
 import { auth } from '../config/firebase'
 
 const api = axios.create({
-  baseURL: '/api',
+  baseURL: 'http://localhost:5001/api',
   headers: {
     'Content-Type': 'application/json'
   }
@@ -12,6 +12,14 @@ const api = axios.create({
 api.interceptors.request.use(
   async (config) => {
     try {
+      // In development, skip Firebase auth as backend has auth bypass
+      const isDevelopment = import.meta.env.MODE === 'development';
+      
+      if (isDevelopment) {
+        console.log('Development mode: skipping Firebase auth for request to', config.url);
+        return config;
+      }
+      
       // Get current Firebase user
       const user = auth.currentUser;
       
@@ -35,7 +43,10 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
-    if (error.response?.status === 401) {
+    // In development mode, don't try to refresh tokens
+    const isDevelopment = import.meta.env.MODE === 'development';
+    
+    if (error.response?.status === 401 && !isDevelopment) {
       // Token expired or invalid - try to refresh
       try {
         const user = auth.currentUser;
@@ -50,6 +61,11 @@ api.interceptors.response.use(
         window.location.href = '/login';
       }
     }
+    
+    if (error.response?.status === 401 && isDevelopment) {
+      console.error('401 error in development mode - check backend auth bypass');
+    }
+    
     return Promise.reject(error)
   }
 )

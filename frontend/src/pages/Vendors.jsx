@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { FaPlus, FaEdit, FaTrash, FaStar, FaSearch, FaFilter } from 'react-icons/fa'
-import api from '../services/api'
+import api from '../services/simpleApi'
 import { toast } from 'react-toastify'
 
 const Vendors = () => {
@@ -17,22 +17,18 @@ const Vendors = () => {
 
   const fetchVendors = async () => {
     try {
-      // Try regular endpoint first, fallback to test endpoint
-      let response;
-      try {
-        response = await api.get('/vendors');
-      } catch (authError) {
-        // If auth fails, use test endpoint
-        console.log('Using test endpoint for vendors');
-        const testResponse = await fetch('http://localhost:5001/api/vendors/test/list');
-        const data = await testResponse.json();
-        response = { data };
-      }
+      console.log('Fetching vendors...')
+      // Try regular endpoint with increased limit
+      const response = await api.get('/vendors?limit=100')
+      console.log('Vendors received:', response.data.count)
       setVendors(response.data.data || [])
     } catch (error) {
-      console.error('Error fetching vendors:', error);
-      toast.error('Failed to fetch vendors')
+      console.error('Error fetching vendors:', error)
+      console.error('Error response:', error.response?.data)
+      toast.error('Failed to fetch vendors: ' + (error.response?.data?.message || error.message))
+      setVendors([])
     } finally {
+      console.log('Setting loading to false')
       setLoading(false)
     }
   }
